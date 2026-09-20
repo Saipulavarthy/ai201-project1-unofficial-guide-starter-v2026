@@ -109,13 +109,19 @@ nothing to stitch back together.
      visible. Milestone 4. -->
 
 **Question:**
+What are wait times like at Kestrel Commons around lunch?
 
 **Answer:**
-
 ```
+Based on the documents, wait times at Kestrel Commons are 20 to 25 minutes between 12:15 and 1:00, and under 5 minutes before 11:45 (dining_kestrel_commons.txt).
+
+Sources retrieved: dining_halden_hall_followup.txt, dining_kestrel_commons.txt, dining_kestrel_commons_followup.txt, dining_north_kitchen_followup.txt, dining_the_ridgeway_cafe_followup.txt
+
 ```
 
 **My relevance cutoff:**
+
+0.6 (unchanged from the starter default)
 
 <!-- The number you set in config.py, and how you got there.
 
@@ -126,9 +132,24 @@ nothing to stitch back together.
 
      Milestone 4. -->
 
+I ran my 5 real questions and the 5 OUT_OF_SCOPE questions and recorded the best 
+distance for each. In-corpus distances ranged from 0.183 to 0.461; out-of-scope 
+distances ranged from 0.825 to 0.934 — a wide, clean gap with no overlap. The 
+default cutoff of 0.6 sits almost exactly in the middle of that gap, giving 
+comfortable margin on both sides, so I kept it rather than moving it.
+
 | Question | In corpus? | Best distance |
 |---|---|---|
-|  |  |  |
+| What are wait times like at Kestrel Commons around lunch? | Yes | 0.183 |
+| What time does Kestrel Commons close on weekends? | Yes | 0.407 |
+| Which floors in Aldridge Hall are quiet floors? | Yes | 0.356 |
+| How late is the library open during term? | Yes | 0.461 |
+| Do dining dollars roll over from spring to the following fall? | Yes | 0.210 |
+| What is the capital of Mongolia? | No | 0.825 |
+| How do I change the oil in a diesel engine? | No | 0.934 |
+| Who won the 1994 World Cup? | No | 0.886 |
+| What is the recommended dosage of ibuprofen for a headache? | No | 0.844 |
+| How do I write a for loop in Rust? | No | 0.896 |
 
 ## How I Used AI
 
