@@ -57,39 +57,33 @@ in at least 4 of 5 tries.
 
 ## 4. Something about your chunks
 
-<!-- YOU WRITE THIS ONE.
-
-     How would you know if your chunks were the right size? Name something
-     countable or observable.
-
-     Examples of the right shape — don't copy these, they should come from
-     what you actually saw in Milestone 3:
-       - "At least 4 of 5 sampled chunks read as a complete thought, with no
-          sentence cut in half at either end."
-       - "No chunk is shorter than 200 characters, since anything below that
-          in my corpus turned out to be a heading with no content under it." -->
-
-
+No chunk falls between 200 and 300 characters, since that range in my corpus 
+is long enough to have started explaining something but too short to have 
+finished it.
 
 **Why this target:**
 
-
+My chunker reported chunks averaging 317 characters (shortest 178, longest 
+549). I'd rather see chunks cluster toward either end — short, self-contained 
+facts, or long enough to hold full context - than sit in an ambiguous middle 
+that likely means a chunk started explaining something and got cut off before 
+finishing it.
 
 ---
 
 ## 5. Your choice
 
-<!-- YOU WRITE THIS ONE TOO.
-
-     Pick something you actually care about getting right. It could be about
-     speed, about refusals, about a particular kind of question your corpus
-     handles badly, about source attribution being correct rather than merely
-     present — anything, as long as it names a number or an observable
-     outcome. -->
-
-
+For the Aldridge Hall floors question, the answer must come specifically from 
+housing_aldridge_hall_noise.txt — not just contain "3 and 4," since other 
+documents in my corpus could plausibly mention those numbers for unrelated 
+reasons.
 
 **Why this target:**
+
+This is the question I'm least confident about. "3 and 4" could show up 
+correct-looking but be pulled from the wrong context — like room numbers, 
+building numbers, or some other unrelated pair of digits in a different 
+document. I want to verify the source, not just the surface answer.
 
 
 
