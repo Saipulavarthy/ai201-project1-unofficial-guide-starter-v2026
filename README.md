@@ -21,11 +21,7 @@
 
 ## What This Does
 
-<!-- Three or four sentences. Which corpus you picked, and the kinds of
-     questions your system answers. Write it for someone who has never seen
-     this repo.
-
-     Milestone 5. -->
+This is a retrieval-augmented question-answering system built on the campus_life corpus — 88 short posts (1–3 paragraphs each) covering dining halls, housing, courses, and campus administration. Ask it a question like "what are wait times like at Kestrel Commons" or "which floors in Aldridge Hall are quiet," and it retrieves the most relevant post, checks that it's actually close enough to be useful, and answers using only that content — naming its source. Questions outside the corpus (like sports trivia or general how-tos) get refused rather than guessed at.
 
 ## Chunking Strategy
 
@@ -153,18 +149,9 @@ comfortable margin on both sides, so I kept it rather than moving it.
 
 ## How I Used AI
 
-<!-- Two specific moments. For each: what you asked for, what came back, and
-     what you changed about it.
+**1.** For Milestone 3, I asked Claude to help me implement my chunking strategy. I already knew I wanted "one document, one chunk" rather than a character-count split, since campus_life posts are short and usually about one topic. I gave that instinct to my VS Code AI assistant with a prompt describing the exact behavior I wanted. It implemented `split_documents` correctly, but also flagged something I hadn't considered: a document that's only whitespace would now produce an empty chunk, whereas the original `fallback_split` would have silently skipped it. I decided to leave it as-is since campus_life doesn't have any blank files, but it was a good catch I wouldn't have thought to check for myself.
 
-     "I asked Claude to write the chunking function from my notes. It ignored
-     the overlap, so I added that myself" is the level of detail we're after.
-     "I used AI to help me code" is not.
-
-     Milestone 5. -->
-
-**1.**
-
-**2.**
+**2.** For Milestone 2's acceptance criteria, I initially asked Claude to just write criteria #4 and #5 for me. It refused, since the assignment is explicit that AI shouldn't write these — the reasoning has to be defensible as your own. Instead, it asked me two direct questions: which of my chunk-length numbers (178 shortest, 317 average, 549 longest) looked wrong to me, and which of my five test questions worried me most. I said the 317-character average looked like an awkward middle ground, and that the Aldridge Hall floors question worried me because "3 and 4" could show up in an answer without actually coming from the right source. Claude then helped me turn those two answers into properly worded criteria, but the judgment calls were mine.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
