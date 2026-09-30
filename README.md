@@ -311,7 +311,19 @@ every question still passed comfortably under the 0.6 cutoff.
      Milestone 4. -->
 
 ## What's Still Broken
-
+**Criterion 4 (no chunk between 200-300 characters)** — still missed, though 
+improved from 39/88 to 14/49. The 14 remaining offenders are all standalone 
+files (13 admin_* notices plus advising_registration.txt) that had no natural 
+companion to merge with — each one really is just a short, single-fact post 
+on its own. The next step would be to either merge these admin posts by 
+theme (e.g. combining several short registrar-related notices into one 
+"registrar policies" chunk) or accept that some posts are genuinely meant to 
+be this short and revise the criterion's target instead of the chunker. I 
+stopped here because the improvement I made already fixed the majority of the 
+problem (course, dining, and housing clusters, which accounted for most of 
+the original misses), and further merging admin files risks combining 
+unrelated policies just to hit a length target, which could hurt answer 
+quality more than it helps.
 <!-- For each criterion still missed after your fix: what you'd do about it,
      and why you stopped where you did.
 
@@ -321,6 +333,20 @@ every question still passed comfortably under the 0.6 cutoff.
      Milestone 5. -->
 
 ## What I'd Do Differently
+
+Knowing what I know now, I'd write criterion 4 differently. My original target 
+— "no chunk falls between 200-300 characters" — assumed that gap in the middle 
+would naturally be empty, without actually checking the corpus's real length 
+distribution first. It turned out nearly half the corpus (39 of 88 documents) 
+is made up of genuinely short, single-fact posts that have every right to be 
+that length. A better version of this criterion would have picked a target 
+tied to something I could observe directly in Milestone 1, like "at least 4 
+of 5 sampled chunks read as a complete thought with no sentence cut off" — 
+which tests the thing I actually cared about (does the chunk make sense on 
+its own?) rather than a length range I hadn't verified against real data.
+
+The other four criteria held up well and I wouldn't change them — they were 
+specific, testable, and matched what I actually saw when I read the corpus.
 
 <!-- Knowing what you know now — which of your five criteria would you write
      differently, and why?
