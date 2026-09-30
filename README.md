@@ -211,6 +211,29 @@ comfortable margin on both sides, so I kept it rather than moving it.
 
 ## Diagnoses
 
+Stage: chunking (specifically, the interaction between the "one chunk per 
+document" decision and the natural length distribution of the corpus).
+
+Mechanism: since split_documents makes each document exactly one chunk, chunk 
+length is just document length. The corpus turns out to contain two distinct 
+kinds of posts: broad narrative posts covering a topic from several angles 
+(300-549 characters, e.g. housing_innisfree_hall.txt), and narrow single-fact 
+posts — course workloads, exam formats, laundry costs, noise policies, and 
+short admin notices — that only need one or two sentences to say their one 
+thing. Those narrow posts consistently land in the 200-300 character range, 
+which is exactly the zone criterion 4 predicted would be empty.
+
+The criterion assumed chunk lengths would cluster at the extremes (short 
+fragments vs. long context-rich passages) and be sparse in the middle. That 
+assumption didn't hold — the middle is where nearly half the corpus (39 of 88 
+documents) actually lives, because a lot of real campus_life posts are 
+genuinely short, single-topic notes rather than fragments of something longer.
+
+This isn't a defect in the chunker or a broken pipeline — every chunk, even 
+the 200-300 character ones, reads as a complete thought (see Sample Chunks). 
+The problem is with the target I set in criterion 4, not with retrieval or 
+generation: criteria 1, 2, 3, and 5 all passed cleanly using these same chunks.
+
 <!-- For each miss: which stage caused it, and how. The stage alone isn't
      enough — you need the mechanism.
 
@@ -231,9 +254,24 @@ comfortable margin on both sides, so I kept it rather than moving it.
 
 ## The Improvement
 
-**What I changed:**
+**What I changed:** Modified `split_documents` in `chunker.py` to merge related companion documents into single chunks, instead of treating every 
+document as its own chunk. Course files (a course's main post + its exams 
+post + its workload post), dining files (a hall's main post + its followup), 
+and housing files (a hall's main post + its noise post + its laundry post) 
+are now combined into one chunk each. The merged chunk's `source` field lists 
+every original filename joined with "+", so citations still show exactly 
+which files contributed. Documents with no companion (admin_* files, 
+health_center.txt, money_jobs.txt, etc.) are untouched — still one chunk per 
+document, same as before.
 
-**Why I picked it:**
+**Why I picked it:** My diagnosis for criterion 4 traced the 200-300 
+character pileup to narrow, single-fact companion posts — course exam/workload 
+notes, dining followups, and housing noise/laundry notes — that were too thin 
+to stand alone as chunks. Merging each of these with its base post directly 
+targets that mechanism: the merged chunk is naturally longer, since it now 
+holds several related facts instead of one, which should pull chunks out of 
+the 200-300 range without changing anything about documents that were never 
+part of the problem.
 
 <!-- Connect it to a specific diagnosis above in one sentence. If you can't,
      you picked a fix because it sounded impressive. -->
@@ -245,13 +283,25 @@ comfortable margin on both sides, so I kept it rather than moving it.
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 2. Every answer names a source | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 3. Gate stops out-of-corpus questions | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 4. No chunk falls between 200-300 characters | 0 chunks | 14/49 | 14/49 | 14/49 | MISSED (improved from 39/88) |
+| 5. Aldridge Hall answer cites housing_aldridge_hall_noise.txt | Cited in all 3 | Cited | Cited | Cited | MET |
 
 **Did it help?**
+
+Yes, substantially, though not completely. Merging course, dining, and housing 
+companion files cut criterion 4's failure count from 39/88 chunks (44%) to 
+14/49 chunks (29%) — nearly two-thirds of the original violations disappeared, 
+and every one of the remaining 14 is now a standalone admin_* file or 
+advising_registration.txt, none of which had a companion to merge with. 
+Criteria 1, 2, 3, and 5 all held steady with no regressions — the merge didn't 
+break anything that was already working, including the Aldridge Hall source 
+citation, which was the main risk with this change. The one tradeoff: 
+distances shifted up slightly across the board (e.g. Aldridge Hall went from 
+0.356 to 0.495) since merged chunks are longer and less tightly focused, but 
+every question still passed comfortably under the 0.6 cutoff.
 
 <!-- Say plainly whether it did, and how you know. If it made things worse,
      say that — a change that backfired, honestly reported, earns full credit

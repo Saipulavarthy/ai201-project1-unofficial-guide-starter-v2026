@@ -80,25 +80,70 @@ def fallback_split(
     return chunks
 
 
+# Topic prefix -> the companion suffixes that belong with its base post.
+# course_cs_210.txt + course_cs_210_exams.txt + course_cs_210_workload.txt
+# all share the key ("course", "cs_210").
+CLUSTER_SUFFIXES = {
+    "course": ("_exams", "_workload"),
+    "dining": ("_followup",),
+    "housing": ("_noise", "_laundry"),
+}
+
+
+def _cluster_key(filename: str) -> tuple[str, str] | None:
+    """Return (prefix, topic) for a clusterable file, or None if it stands alone."""
+    stem = filename.removesuffix(".txt")
+    prefix, _, rest = stem.partition("_")
+    if prefix not in CLUSTER_SUFFIXES or not rest:
+        return None
+    for suffix in CLUSTER_SUFFIXES[prefix]:
+        if rest.endswith(suffix):
+            return prefix, rest.removesuffix(suffix)
+    return prefix, rest
+
+
 def split_documents(documents: list[Document]) -> list[Chunk]:
     """
-    Split documents into chunks — one whole document, one chunk.
+    Split documents into chunks — one topic, one chunk.
 
-    These are short posts, not long guides. A single post is already about one
-    thing, and the answer to a question is usually spread across the whole post
-    rather than sitting in one sentence. Cutting at a character count splits
-    thoughts in half for no gain, so this strategy does not cut at all: each
-    document keeps its full text and becomes exactly one chunk at index 0.
+    These are short posts, not long guides, so nothing is ever cut. But the
+    narrow companion posts (a course's exam and workload notes, a dining
+    hall's follow-up, a hall's noise and laundry notes) are too thin to stand
+    on their own and kept landing in retrieval as 200-300 character scraps.
+    So each companion is merged with its base post into one chunk: base file
+    first, then the companions alphabetically, joined by a blank line, with
+    every filename in the cluster joined by "+" as the source. Everything
+    else stays one whole document, one chunk at index 0.
     """
-    return [
-        Chunk(
-            text=doc.text.strip(),
-            source=doc.source,
-            index=0,
-            produced_by="chunker.py::split_documents",
+    clusters: dict[tuple[str, str], list[Document]] = {}
+    order: list[tuple[str, str] | Document] = []
+    for doc in documents:
+        key = _cluster_key(doc.source)
+        if key is None:
+            order.append(doc)
+        else:
+            if key not in clusters:
+                clusters[key] = []
+                order.append(key)
+            clusters[key].append(doc)
+
+    chunks: list[Chunk] = []
+    for item in order:
+        if isinstance(item, Document):
+            group = [item]
+        else:
+            prefix, topic = item
+            base = f"{prefix}_{topic}.txt"
+            group = sorted(clusters[item], key=lambda d: (d.source != base, d.source))
+        chunks.append(
+            Chunk(
+                text="\n\n".join(d.text.strip() for d in group).strip(),
+                source="+".join(d.source for d in group),
+                index=0,
+                produced_by="chunker.py::split_documents",
+            )
         )
-        for doc in documents
-    ]
+    return chunks
 
 
 def describe(chunks: list[Chunk]) -> str:
