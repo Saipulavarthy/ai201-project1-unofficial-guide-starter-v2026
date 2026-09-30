@@ -203,11 +203,11 @@ comfortable margin on both sides, so I kept it rather than moving it.
 
 | # | Criterion | Verdict | How I decided |
 |---|---|---|---|
-| 1 |  |  |  |
-| 2 |  |  |  |
-| 3 |  |  |  |
-| 4 |  |  |  |
-| 5 |  |  |  |
+| 1 | Retrieved chunk contains the answer (4 of 5) | MET | All 5 of my 5 questions had the correct answer in the retrieved chunks, across all 3 runs — well above the 4/5 target. |
+| 2 | Every answer names a source (5 of 5) | MET | All 5 questions named at least one correct source file in every run, with no exceptions across all 3 passes. |
+| 3 | Gate stops out-of-corpus questions (4 of 5) | MET | All 5 out-of-scope questions were refused by the gate, with distances (0.825–0.934) clearly above the 0.6 cutoff and well separated from my in-corpus distances (0.183–0.461). |
+| 4 | No chunk falls between 200–300 characters | MISSED | I counted chunk lengths directly and found 39 of 88 chunks (44%) fall in that range — not a close miss, a clear one. Housing and admin posts in particular cluster in this length. |
+| 5 | Aldridge Hall answer cites housing_aldridge_hall_noise.txt | MET | In all 3 runs, the answer cited housing_aldridge_hall_noise.txt alongside housing_aldridge_hall.txt. I judged this as meeting the target since the correct noise file was present and correctly cited every time, even though a second file came along with it. |
 
 ## Diagnoses
 
