@@ -273,8 +273,6 @@ holds several related facts instead of one, which should pull chunks out of
 the 200-300 range without changing anything about documents that were never 
 part of the problem.
 
-<!-- Connect it to a specific diagnosis above in one sentence. If you can't,
-     you picked a fix because it sounded impressive. -->
 
 ### Run Log — After
 
@@ -303,12 +301,6 @@ distances shifted up slightly across the board (e.g. Aldridge Hall went from
 0.356 to 0.495) since merged chunks are longer and less tightly focused, but 
 every question still passed comfortably under the 0.6 cutoff.
 
-<!-- Say plainly whether it did, and how you know. If it made things worse,
-     say that — a change that backfired, honestly reported, earns full credit
-     and is more interesting than one that worked. What matters is that you can
-     tell.
-
-     Milestone 4. -->
 
 ## What's Still Broken
 **Criterion 4 (no chunk between 200-300 characters)** — still missed, though 
