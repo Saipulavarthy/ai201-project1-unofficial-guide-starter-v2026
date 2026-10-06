@@ -324,13 +324,7 @@ problem (course, dining, and housing clusters, which accounted for most of
 the original misses), and further merging admin files risks combining 
 unrelated policies just to hit a length target, which could hurt answer 
 quality more than it helps.
-<!-- For each criterion still missed after your fix: what you'd do about it,
-     and why you stopped where you did.
 
-     "I ran out of time" is fine if it's true. Pretending nothing is left is
-     not.
-
-     Milestone 5. -->
 
 ## What I'd Do Differently
 
